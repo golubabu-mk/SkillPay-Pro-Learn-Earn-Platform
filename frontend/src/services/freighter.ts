@@ -3,8 +3,8 @@ import {
   isAllowed,
   setAllowed,
   requestAccess,
-  getAddress,
-  signMessage,
+  getPublicKey,
+  signBlob,
 } from "@stellar/freighter-api";
 
 export class FreighterNotInstalledError extends Error {
@@ -27,29 +27,27 @@ export class WalletConnectionRejectedError extends Error {
  */
 export async function connectFreighter(): Promise<string> {
   const connected = await isConnected();
-  if (!connected.isConnected) {
+  if (!connected) {
     throw new FreighterNotInstalledError();
   }
 
   const allowed = await isAllowed();
-  if (!allowed.isAllowed) {
+  if (!allowed) {
     const access = await setAllowed();
-    if (!access.isAllowed) {
+    if (!access) {
       throw new WalletConnectionRejectedError();
     }
   }
 
-  const access = await requestAccess();
-  if (access.error) {
+  try {
+    const address = await requestAccess();
+    if (!address) {
+      throw new WalletConnectionRejectedError();
+    }
+    return address;
+  } catch (e) {
     throw new WalletConnectionRejectedError();
   }
-
-  const addressResult = await getAddress();
-  if (addressResult.error || !addressResult.address) {
-    throw new WalletConnectionRejectedError();
-  }
-
-  return addressResult.address;
 }
 
 /**
@@ -57,11 +55,12 @@ export async function connectFreighter(): Promise<string> {
  * Used for the login challenge — does not touch the blockchain or cost gas.
  */
 export async function signAuthMessage(message: string): Promise<string> {
-  const result = await signMessage(message);
-  if (result.error || !result.signedMessage) {
+  try {
+    const b64 = btoa(message);
+    const result = await signBlob(b64);
+    if (!result) throw new Error();
+    return result;
+  } catch (e) {
     throw new Error("Message signing was rejected or failed.");
   }
-  // Freighter returns signedMessage as a string (base64) when no keypair provided as Uint8Array
-  const signed = result.signedMessage;
-  return typeof signed === "string" ? signed : Buffer.from(signed).toString("base64");
 }
