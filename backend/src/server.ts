@@ -1,4 +1,5 @@
 import "dotenv/config";
+import "express-async-errors";
 import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import * as Sentry from "@sentry/node";
