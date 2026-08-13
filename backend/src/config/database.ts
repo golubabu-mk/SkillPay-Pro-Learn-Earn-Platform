@@ -11,6 +11,9 @@ export async function connectDatabase(): Promise<void> {
   await mongoose.connect(uri);
   console.log("[db] Connected to MongoDB");
 
+  const User = require("../models/User").default;
+  await User.collection.dropIndex("email_1").catch(() => console.log("email_1 index not found or already dropped"));
+
   mongoose.connection.on("error", (err) => {
     console.error("[db] MongoDB connection error:", err);
   });
