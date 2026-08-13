@@ -54,13 +54,19 @@ export async function connectFreighter(): Promise<string> {
  * Signs an arbitrary UTF-8 message with the connected Freighter wallet.
  * Used for the login challenge — does not touch the blockchain or cost gas.
  */
-export async function signAuthMessage(message: string): Promise<string> {
+export async function signAuthMessage(message: string, walletAddress: string): Promise<string> {
   try {
     const b64 = btoa(message);
-    const result = await signBlob(b64);
+    
+    // Promise.race to prevent Freighter signBlob from hanging indefinitely (known bug)
+    const result = await Promise.race([
+      signBlob(b64, { accountToSign: walletAddress }),
+      new Promise<string>((_, reject) => setTimeout(() => reject(new Error("Timeout")), 60000))
+    ]);
+    
     if (!result) throw new Error();
     return result;
   } catch (e) {
-    throw new Error("Message signing was rejected or failed.");
+    throw new Error("Message signing was rejected, timed out, or failed.");
   }
 }

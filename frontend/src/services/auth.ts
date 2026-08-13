@@ -23,7 +23,7 @@ export async function loginWithWallet(): Promise<{ token: string; user: AuthUser
   const { data: challengeData } = await api.post("/auth/challenge", { walletAddress });
   const { message, isNewUser } = challengeData as { message: string; isNewUser: boolean };
 
-  const signature = await signAuthMessage(message);
+  const signature = await signAuthMessage(message, walletAddress);
 
   const { data: verifyData } = await api.post("/auth/verify", { walletAddress, signature });
   const { token, user } = verifyData as { token: string; user: AuthUser };

@@ -2,6 +2,7 @@ import "dotenv/config";
 import "express-async-errors";
 import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
+import morgan from "morgan";
 import * as Sentry from "@sentry/node";
 import { connectDatabase } from "./config/database";
 import authRoutes from "./routes/authRoutes";
@@ -30,6 +31,7 @@ app.use(
   })
 );
 app.use(express.json());
+app.use(morgan("dev"));
 
 app.get("/api/health", (_req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
