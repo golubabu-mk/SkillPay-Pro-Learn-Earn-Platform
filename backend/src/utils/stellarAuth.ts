@@ -29,12 +29,21 @@ export function generateNonce(): string {
 export function verifyStellarSignature(
   walletAddress: string,
   message: string,
-  signatureBase64: string
+  signatureBase64: string | { type: "Buffer"; data: number[] } | any
 ): boolean {
   try {
     const keypair = Keypair.fromPublicKey(walletAddress);
     const messageBuffer = Buffer.from(message, "utf-8");
-    const signatureBuffer = Buffer.from(signatureBase64, "base64");
+    
+    let signatureBuffer: Buffer;
+    if (typeof signatureBase64 === "object" && signatureBase64 !== null && signatureBase64.type === "Buffer") {
+      signatureBuffer = Buffer.from(signatureBase64.data);
+    } else if (typeof signatureBase64 === "object" && signatureBase64 !== null && "signature" in signatureBase64) {
+      signatureBuffer = Buffer.from(signatureBase64.signature, "base64");
+    } else {
+      signatureBuffer = Buffer.from(signatureBase64 as string, "base64");
+    }
+    
     return keypair.verify(messageBuffer, signatureBuffer);
   } catch (err) {
     return false;
