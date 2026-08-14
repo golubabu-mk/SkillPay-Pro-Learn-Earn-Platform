@@ -1,6 +1,6 @@
 import { Response } from "express";
 import User from "../models/User";
-import { generateAuthMessage, generateNonce, verifyStellarSignature } from "../utils/stellarAuth";
+import { generateAuthTransaction, generateNonce, verifyStellarSignature } from "../utils/stellarAuth";
 import { signToken } from "../utils/jwt";
 import { AuthedRequest } from "../middleware/auth";
 
@@ -47,7 +47,7 @@ export async function requestChallenge(req: AuthedRequest, res: Response) {
     await user.save();
   }
 
-  const message = generateAuthMessage(walletAddress, nonce);
+  const message = generateAuthTransaction(walletAddress, nonce);
 
   return res.json({ message, isNewUser: user.name === "New User" });
 }
@@ -78,7 +78,7 @@ export async function verifySignature(req: AuthedRequest, res: Response) {
     return res.status(401).json({ error: "Login challenge expired. Request a new one." });
   }
 
-  const expectedMessage = generateAuthMessage(walletAddress, user.authNonce);
+  const expectedMessage = generateAuthTransaction(walletAddress, user.authNonce);
   
   console.log("verifySignature DEBUG:");
   console.log("wallet:", walletAddress);

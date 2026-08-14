@@ -5,6 +5,7 @@ import {
   requestAccess,
   getPublicKey,
   signBlob,
+  signTransaction,
 } from "@stellar/freighter-api";
 
 export class FreighterNotInstalledError extends Error {
@@ -54,13 +55,11 @@ export async function connectFreighter(): Promise<string> {
  * Signs an arbitrary UTF-8 message with the connected Freighter wallet.
  * Used for the login challenge — does not touch the blockchain or cost gas.
  */
-export async function signAuthMessage(message: string, walletAddress: string): Promise<string> {
+export async function signAuthMessage(transactionXdr: string, walletAddress: string): Promise<string> {
   try {
-    const b64 = btoa(message);
-    
     // Promise.race to prevent Freighter signBlob from hanging indefinitely (known bug)
     const result = await Promise.race([
-      signBlob(b64, { accountToSign: walletAddress }),
+      signTransaction(transactionXdr, { network: "TESTNET", accountToSign: walletAddress }),
       new Promise<string>((_, reject) => setTimeout(() => reject(new Error("Timeout")), 60000))
     ]);
     

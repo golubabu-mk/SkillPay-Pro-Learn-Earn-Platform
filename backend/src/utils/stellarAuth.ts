@@ -1,20 +1,14 @@
-import { Keypair } from "@stellar/stellar-sdk";
+import { Keypair, TransactionBuilder, Account, Networks, Operation, Transaction } from "@stellar/stellar-sdk";
 import crypto from "crypto";
 
-/**
- * Generates a fresh, human-readable nonce message for a wallet to sign.
- * The learner/organization signs this exact string in Freighter
- * (via signMessage), and we verify the signature server-side.
- */
-export function generateAuthMessage(walletAddress: string, nonce: string): string {
-  return [
-    "Sign this message to log in to SkillPay Pro.",
-    "",
-    `Wallet: ${walletAddress}`,
-    `Nonce: ${nonce}`,
-    "",
-    "This request will not trigger a blockchain transaction or cost gas.",
-  ].join("\n");
+export function generateAuthTransaction(walletAddress: string, nonce: string): string {
+  const account = new Account(walletAddress, "0");
+  const tx = new TransactionBuilder(account, { fee: "100", networkPassphrase: Networks.TESTNET })
+    .addOperation(Operation.manageData({ name: "SkillPayAuth", value: Buffer.from(nonce) }))
+    .setTimeout(300) // 5 minutes
+    .build();
+    
+  return tx.toXDR();
 }
 
 export function generateNonce(): string {
@@ -28,23 +22,24 @@ export function generateNonce(): string {
  */
 export function verifyStellarSignature(
   walletAddress: string,
-  message: string,
-  signatureBase64: string | { type: "Buffer"; data: number[] } | any
+  expectedXdr: string,
+  signedXdrBase64: string
 ): boolean {
   try {
-    const keypair = Keypair.fromPublicKey(walletAddress);
-    const messageBuffer = Buffer.from(message, "utf-8");
+    const tx = new Transaction(signedXdrBase64, Networks.TESTNET);
+    const expectedTx = new Transaction(expectedXdr, Networks.TESTNET);
     
-    let signatureBuffer: Buffer;
-    if (typeof signatureBase64 === "object" && signatureBase64 !== null && signatureBase64.type === "Buffer") {
-      signatureBuffer = Buffer.from(signatureBase64.data);
-    } else if (typeof signatureBase64 === "object" && signatureBase64 !== null && "signature" in signatureBase64) {
-      signatureBuffer = Buffer.from(signatureBase64.signature, "base64");
-    } else {
-      signatureBuffer = Buffer.from(signatureBase64 as string, "base64");
+    // Hash must match exactly
+    if (tx.hash().toString("hex") !== expectedTx.hash().toString("hex")) {
+      return false;
     }
     
-    return keypair.verify(messageBuffer, signatureBuffer);
+    // Check signature
+    if (!tx.signatures || tx.signatures.length === 0) return false;
+    
+    const keypair = Keypair.fromPublicKey(walletAddress);
+    const signature = tx.signatures[0].signature();
+    return keypair.verify(tx.hash(), signature);
   } catch (err) {
     return false;
   }
