@@ -56,10 +56,14 @@ export async function requestChallenge(req: AuthedRequest, res: Response) {
  * STEP 2 — Verify the signed message and issue a JWT.
  */
 export async function verifySignature(req: AuthedRequest, res: Response) {
-  const { walletAddress, signature } = req.body as {
+  let { walletAddress, signature } = req.body as {
     walletAddress?: string;
-    signature?: string;
+    signature?: string | { signature: string } | any;
   };
+
+  if (typeof signature === "object" && signature !== null && "signature" in signature) {
+    signature = signature.signature;
+  }
 
   if (!walletAddress || !signature) {
     return res.status(400).json({ error: "walletAddress and signature are required" });
@@ -75,9 +79,17 @@ export async function verifySignature(req: AuthedRequest, res: Response) {
   }
 
   const expectedMessage = generateAuthMessage(walletAddress, user.authNonce);
-  const isValid = verifyStellarSignature(walletAddress, expectedMessage, signature);
+  
+  console.log("verifySignature DEBUG:");
+  console.log("wallet:", walletAddress);
+  console.log("expectedMessage:", expectedMessage);
+  console.log("signature type:", typeof signature);
+  console.log("signature:", signature);
+
+  const isValid = verifyStellarSignature(walletAddress, expectedMessage, signature as string);
 
   if (!isValid) {
+    console.log("Signature verification failed!");
     return res.status(401).json({ error: "Signature verification failed" });
   }
 
