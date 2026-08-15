@@ -1,11 +1,16 @@
 import { Keypair, TransactionBuilder, Account, Networks, Operation, Transaction } from "@stellar/stellar-sdk";
 import crypto from "crypto";
 
-export function generateAuthTransaction(walletAddress: string, nonce: string): string {
+export function generateAuthTransaction(walletAddress: string, nonce: string, expiresAt: Date): string {
   const account = new Account(walletAddress, "0");
-  const tx = new TransactionBuilder(account, { fee: "100", networkPassphrase: Networks.TESTNET })
+  const maxTime = Math.floor(expiresAt.getTime() / 1000).toString();
+  
+  const tx = new TransactionBuilder(account, { 
+    fee: "100", 
+    networkPassphrase: Networks.TESTNET,
+    timebounds: { minTime: "0", maxTime }
+  })
     .addOperation(Operation.manageData({ name: "SkillPayAuth", value: Buffer.from(nonce) }))
-    .setTimeout(300) // 5 minutes
     .build();
     
   return tx.toXDR();

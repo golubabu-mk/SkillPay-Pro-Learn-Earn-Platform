@@ -47,7 +47,7 @@ export async function requestChallenge(req: AuthedRequest, res: Response) {
     await user.save();
   }
 
-  const message = generateAuthTransaction(walletAddress, nonce);
+  const message = generateAuthTransaction(walletAddress, nonce, expiresAt);
 
   return res.json({ message, isNewUser: user.name === "New User" });
 }
@@ -78,7 +78,7 @@ export async function verifySignature(req: AuthedRequest, res: Response) {
     return res.status(401).json({ error: "Login challenge expired. Request a new one." });
   }
 
-  const expectedMessage = generateAuthTransaction(walletAddress, user.authNonce);
+  const expectedMessage = generateAuthTransaction(walletAddress, user.authNonce, user.authNonceExpiresAt);
   
   console.log("verifySignature DEBUG:");
   console.log("wallet:", walletAddress);
