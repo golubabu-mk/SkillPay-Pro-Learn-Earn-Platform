@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 
 export function Navbar() {
-  const { user, logout, login, connecting } = useAuth();
+  const { user, logout, login, connecting, balance } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -47,13 +47,18 @@ export function Navbar() {
 
         <div className="hidden md:flex items-center gap-3">
           {user ? (
-            <button
-              onClick={logout}
-              className="flex items-center gap-1.5 font-mono text-xs uppercase tracking-widest border border-ledger-line px-3 py-2 rounded-seal text-ledger-inkMuted hover:border-ledger-alert hover:text-ledger-alert transition-colors"
-            >
-              <LogOut size={13} />
-              {user.walletAddress.slice(0, 4)}…{user.walletAddress.slice(-4)}
-            </button>
+            <div className="flex items-center gap-3">
+              <div className="font-mono text-xs text-ledger-inkMuted bg-ledger-surface px-3 py-2 rounded-seal border border-ledger-line">
+                {Number(balance).toFixed(2)} XLM
+              </div>
+              <button
+                onClick={logout}
+                className="flex items-center gap-1.5 font-mono text-xs uppercase tracking-widest border border-ledger-line px-3 py-2 rounded-seal text-ledger-inkMuted hover:border-ledger-alert hover:text-ledger-alert transition-colors"
+              >
+                <LogOut size={13} />
+                {user.walletAddress.slice(0, 4)}…{user.walletAddress.slice(-4)}
+              </button>
+            </div>
           ) : (
             <button
               onClick={handleConnect}
