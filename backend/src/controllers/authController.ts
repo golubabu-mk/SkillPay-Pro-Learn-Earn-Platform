@@ -94,7 +94,7 @@ export async function verifySignature(req: AuthedRequest, res: Response) {
   }
 
   // Rotate the nonce so the signature can't be replayed.
-  user.authNonce = "";
+  user.authNonce = generateNonce();
   user.authNonceExpiresAt = new Date(0);
   await user.save();
 
