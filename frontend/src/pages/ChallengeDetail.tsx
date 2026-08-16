@@ -69,7 +69,7 @@ export default function ChallengeDetail() {
             <Clock size={11} /> Deadline
           </p>
           <p className="font-display text-lg text-ledger-ink">
-            {new Date(challenge.deadline).toLocaleDateString()}
+            {challenge.deadline ? new Date(challenge.deadline).toLocaleDateString() : "No deadline"}
           </p>
         </div>
       </div>

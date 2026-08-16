@@ -9,6 +9,7 @@ const DIFFICULTY_LABEL: Record<string, string> = {
 };
 
 function daysRemaining(deadline: string): number {
+  if (!deadline) return 0;
   const ms = new Date(deadline).getTime() - Date.now();
   return Math.max(0, Math.ceil(ms / (1000 * 60 * 60 * 24)));
 }
@@ -56,7 +57,7 @@ export function ChallengeCard({ challenge }: { challenge: Challenge }) {
       <div className="mb-3">
         <div className="flex items-baseline justify-between mb-1">
           <span className="font-mono text-sm text-ledger-ink">
-            {challenge.rewardAmount.toLocaleString()} XLM
+            {(challenge.rewardAmount || 0).toLocaleString()} XLM
             <span className="text-ledger-inkMuted"> / winner</span>
           </span>
           <span className="font-mono text-[11px] text-ledger-inkMuted">{poolUsedPct}% allocated</span>
@@ -76,7 +77,7 @@ export function ChallengeCard({ challenge }: { challenge: Challenge }) {
         </span>
         <span className="mx-1.5 text-ledger-line">·</span>
         <Clock size={13} />
-        <span>{new Date(challenge.deadline).toLocaleDateString()}</span>
+        <span>{challenge.deadline ? new Date(challenge.deadline).toLocaleDateString() : "No deadline"}</span>
       </div>
     </Link>
   );
