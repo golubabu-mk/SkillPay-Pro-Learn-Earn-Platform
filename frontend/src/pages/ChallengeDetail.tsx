@@ -33,8 +33,8 @@ export default function ChallengeDetail() {
   }
 
   const org = challenge.organizationId as OrganizationSummary;
-  const orgName = typeof org === "object" ? org.name : "Organization";
-  const orgVerified = typeof org === "object" ? org.verified : false;
+  const orgName = org && typeof org === "object" ? org.name : "Organization";
+  const orgVerified = org && typeof org === "object" ? org.verified : false;
   const canSubmit = user?.role === "learner" && challenge.status === "active" && !submitted;
 
   return (

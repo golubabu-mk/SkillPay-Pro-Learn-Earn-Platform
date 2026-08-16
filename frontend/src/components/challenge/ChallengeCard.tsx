@@ -15,8 +15,8 @@ function daysRemaining(deadline: string): number {
 
 export function ChallengeCard({ challenge }: { challenge: Challenge }) {
   const org = challenge.organizationId as OrganizationSummary;
-  const orgName = typeof org === "object" ? org.name : "Organization";
-  const orgVerified = typeof org === "object" ? org.verified : false;
+  const orgName = org && typeof org === "object" ? org.name : "Organization";
+  const orgVerified = org && typeof org === "object" ? org.verified : false;
   const poolUsedPct = Math.round(
     ((challenge.totalRewardPool - challenge.remainingRewardPool) / challenge.totalRewardPool) * 100
   );
