@@ -89,8 +89,8 @@ export async function listChallenges(req: AuthedRequest, res: Response) {
   const { status, category, difficulty, organizationId } = req.query as Record<string, string>;
 
   const filter: Record<string, unknown> = {};
-  if (status) filter.status = status;
-  else filter.status = { $ne: "draft" }; // hide unfunded drafts from the marketplace by default
+  if (status && status !== "all") filter.status = status;
+  else if (!status) filter.status = { $ne: "draft" }; // hide unfunded drafts from the marketplace by default
   if (category) filter.category = category;
   if (difficulty) filter.difficulty = difficulty;
   if (organizationId) filter.organizationId = organizationId;

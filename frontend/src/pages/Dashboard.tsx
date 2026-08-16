@@ -23,7 +23,7 @@ export default function Dashboard() {
     setLoading(true);
     if (user.role === "organization") {
       api
-        .get("/challenges", { params: { organizationId: user.id, status: undefined } })
+        .get("/challenges", { params: { organizationId: user.id, status: "all" } })
         .then((r) => setOrgChallenges(r.data.challenges))
         .finally(() => setLoading(false));
     } else {
