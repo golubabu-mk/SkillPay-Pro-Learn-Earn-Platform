@@ -19,7 +19,8 @@ export default function Settings() {
     e.preventDefault();
     setSaving(true);
     try {
-      await api.patch("/users/profile", { role, username, name, bio });
+      const { data } = await api.patch("/users/profile", { role, username, name, bio });
+      if (data.token) localStorage.setItem("skillpay_token", data.token);
       await refreshUser();
       toast.success("Profile saved");
       navigate("/dashboard");

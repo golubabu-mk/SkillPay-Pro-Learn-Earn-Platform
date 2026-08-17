@@ -34,7 +34,14 @@ export async function updateProfile(req: AuthedRequest, res: Response) {
 
   await user.save();
 
+  const token = require("../utils/jwt").signToken({
+    userId: user._id.toString(),
+    walletAddress: user.walletAddress,
+    role: user.role,
+  });
+
   return res.json({
+    token,
     user: {
       id: user._id,
       walletAddress: user.walletAddress,
