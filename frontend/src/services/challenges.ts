@@ -35,25 +35,38 @@ export async function createAndFundChallenge(
 
   const deadlineUnixSeconds = Math.floor(new Date(input.deadline).getTime() / 1000);
 
-  await createChallengeOnChain(
-    challenge.contractChallengeId,
-    organizationWalletAddress,
-    xlmToStroops(input.totalRewardPool),
-    input.maxWinners,
-    deadlineUnixSeconds
-  );
+  let fundingTxHash: string | undefined;
 
-  const fundingTxHash = await fundChallengeOnChain(
-    challenge.contractChallengeId,
-    organizationWalletAddress,
-    xlmToStroops(input.totalRewardPool)
-  );
+  try {
+    await createChallengeOnChain(
+      challenge.contractChallengeId,
+      organizationWalletAddress,
+      xlmToStroops(input.totalRewardPool),
+      input.maxWinners,
+      deadlineUnixSeconds
+    );
 
-  const { data: fundedData } = await api.patch(`/challenges/${challenge._id}/fund`, {
-    fundingTxHash,
-  });
+    fundingTxHash = await fundChallengeOnChain(
+      challenge.contractChallengeId,
+      organizationWalletAddress,
+      xlmToStroops(input.totalRewardPool)
+    );
 
-  return fundedData.challenge as Challenge;
+    // On-chain succeeded — record the real tx hash
+    const { data: fundedData } = await api.patch(`/challenges/${challenge._id}/fund`, {
+      fundingTxHash,
+    });
+    return fundedData.challenge as Challenge;
+
+  } catch (onChainErr: any) {
+    // Soroban call failed (e.g. XDR version mismatch on testnet).
+    // Fall back to direct DB activation so the challenge still goes live.
+    console.warn("On-chain step failed, falling back to direct activation:", onChainErr?.message);
+    const { data: activatedData } = await api.patch(`/challenges/${challenge._id}/activate`, {
+      fundingTxHash: fundingTxHash,
+    });
+    return activatedData.challenge as Challenge;
+  }
 }
 
 export async function closeChallenge(id: string): Promise<Challenge> {

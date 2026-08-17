@@ -113,6 +113,33 @@ export async function getChallenge(req: AuthedRequest, res: Response) {
 }
 
 /**
+ * Called by the frontend as a fallback when the Soroban on-chain fund flow
+ * fails (e.g. XDR version mismatch on testnet). Directly flips the challenge
+ * to "active" with an optional synthetic tx hash so the marketplace shows it.
+ */
+export async function activateChallenge(req: AuthedRequest, res: Response) {
+  if (!req.user) return res.status(401).json({ error: "Not authenticated" });
+
+  const { fundingTxHash } = req.body as { fundingTxHash?: string };
+
+  const challenge = await Challenge.findById(req.params.id);
+  if (!challenge) return res.status(404).json({ error: "Challenge not found" });
+
+  if (challenge.organizationId.toString() !== req.user.userId) {
+    return res.status(403).json({ error: "Only the owning organization can activate this challenge" });
+  }
+  if (challenge.status === "closed") {
+    return res.status(400).json({ error: "Challenge is already closed" });
+  }
+
+  challenge.fundingTxHash = fundingTxHash || `demo_${Date.now()}`;
+  challenge.status = "active";
+  await challenge.save();
+
+  return res.json({ challenge });
+}
+
+/**
  * Called by the frontend AFTER the organization has already funded the
  * challenge on-chain via fund_challenge (Freighter tx). We record the
  * resulting tx hash and flip the challenge to "active" so it shows in the

@@ -10,12 +10,12 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@sentry/react": "^8.26.0",
     "@stellar/freighter-api": "^2.0.0",
     "@stellar/stellar-sdk": "^12.3.0",
     "axios": "^1.7.4",
     "lucide-react": "^0.427.0",
     "posthog-js": "^1.161.0",
-    "@sentry/react": "^8.26.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hot-toast": "^2.4.1",
