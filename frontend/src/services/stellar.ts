@@ -79,7 +79,12 @@ async function invokeContract(
     throw new Error("Transaction signing was rejected or failed");
   }
 
-  const signedTx = TransactionBuilder.fromXDR(signResult, NETWORK_PASSPHRASE);
+  // Freighter API v2+ returns { signedTxXdr, signerAddress }; older versions return the XDR string directly.
+  const signedXdr = typeof signResult === "object" && signResult !== null && "signedTxXdr" in signResult
+    ? (signResult as { signedTxXdr: string }).signedTxXdr
+    : (signResult as unknown as string);
+
+  const signedTx = TransactionBuilder.fromXDR(signedXdr, NETWORK_PASSPHRASE);
   const sendResult = await server.sendTransaction(signedTx);
 
   if (sendResult.status === "ERROR") {
