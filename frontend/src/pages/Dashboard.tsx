@@ -16,6 +16,7 @@ export default function Dashboard() {
   const { user } = useAuth();
   const [orgChallenges, setOrgChallenges] = useState<Challenge[]>([]);
   const [mySubmissions, setMySubmissions] = useState<MySubmission[]>([]);
+  const [pendingCounts, setPendingCounts] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -24,7 +25,26 @@ export default function Dashboard() {
     if (user.role === "organization") {
       api
         .get("/challenges", { params: { organizationId: user.id, status: "all" } })
-        .then((r) => setOrgChallenges(r.data.challenges))
+        .then(async (r) => {
+          const challenges = r.data.challenges as Challenge[];
+          setOrgChallenges(challenges);
+          // Fetch pending submission counts for each challenge
+          const counts: Record<string, number> = {};
+          await Promise.all(
+            challenges.map(async (c) => {
+              try {
+                const res = await api.get(`/submissions/challenge/${c._id}`);
+                const pending = (res.data.submissions as { status: string }[]).filter(
+                  (s) => s.status === "pending"
+                ).length;
+                counts[c._id] = pending;
+              } catch {
+                counts[c._id] = 0;
+              }
+            })
+          );
+          setPendingCounts(counts);
+        })
         .finally(() => setLoading(false));
     } else {
       api
@@ -76,17 +96,29 @@ export default function Dashboard() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {orgChallenges.map((c) => (
-                <div key={c._id} className="relative">
-                  <ChallengeCard challenge={c} />
-                  <Link
-                    to={`/submissions/${c._id}`}
-                    className="absolute top-3 right-3 font-mono text-[10px] uppercase tracking-widest bg-ledger-bg border border-ledger-seal text-ledger-seal px-2 py-1 rounded-seal"
-                  >
-                    Review
-                  </Link>
-                </div>
-              ))}
+              {orgChallenges.map((c) => {
+                const pending = pendingCounts[c._id] ?? 0;
+                return (
+                  <div key={c._id} className="relative">
+                    <ChallengeCard challenge={c} />
+                    <Link
+                      to={`/submissions/${c._id}`}
+                      className={`absolute top-3 right-3 flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest border px-2 py-1 rounded-seal transition-colors ${
+                        pending > 0
+                          ? "bg-ledger-seal text-ledger-bg border-ledger-seal"
+                          : "bg-ledger-bg border-ledger-seal text-ledger-seal"
+                      }`}
+                    >
+                      {pending > 0 && (
+                        <span className="bg-white text-ledger-seal rounded-full w-4 h-4 flex items-center justify-center text-[10px] font-bold">
+                          {pending}
+                        </span>
+                      )}
+                      Review
+                    </Link>
+                  </div>
+                );
+              })}
             </div>
           )}
         </>
