@@ -64,10 +64,16 @@ export default function SubmissionsReview() {
           xlmToStroops(challenge.rewardAmount || 0)
         );
       } catch (onChainErr: any) {
-        console.warn("On-chain approve failed, continuing with DB approval:", onChainErr?.message);
+        const msg = onChainErr?.message || "";
+        // Error #7 = LearnerAlreadyApproved — first approval already went through on-chain,
+        // the DB just didn't get updated. Treat this as success and proceed.
+        if (!msg.includes("#7") && !msg.includes("LearnerAlreadyApproved")) {
+          console.warn("On-chain approve failed, continuing with DB update:", msg);
+        }
+        // Either way, fall through to the DB update below
       }
 
-      // 2. Backend: persist approval + tx hash
+      // 2. Backend: persist approval + tx hash (always run, even if on-chain failed/duplicate)
       await api.patch(`/submissions/${submission._id}/approve`, { rewardTxHash });
 
       try {
@@ -91,8 +97,8 @@ export default function SubmissionsReview() {
           rewardTxHash,
         });
       } catch (achieveErr: any) {
-        console.warn("Achievement issuance failed, skipping:", achieveErr?.message);
-        // Still record a demo achievement
+        // Achievement issuance failed or duplicate — still record in DB
+        console.warn("Achievement issuance skipped:", achieveErr?.message);
         const credentialHash = await sha256Hex(
           `${challenge.contractChallengeId}:${submission.learnerId.walletAddress}:${Date.now()}`
         );
@@ -103,7 +109,7 @@ export default function SubmissionsReview() {
         }).catch(() => {});
       }
 
-      toast.success(`Reward sent to ${submission.learnerId.name} and achievement issued`);
+      toast.success(`✅ Approved! Reward recorded for ${submission.learnerId.name}`);
       setSubmissions((prev) =>
         prev.map((s) => (s._id === submission._id ? { ...s, status: "approved" } : s))
       );
