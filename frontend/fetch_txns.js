@@ -1,0 +1,70 @@
+import("@stellar/stellar-sdk").then(async ({ Horizon }) => {
+  const server = new Horizon.Server("https://horizon-testnet.stellar.org");
+  const fs = await import("fs");
+
+  const wallets = [
+    "GB7FPS6UPC5SBFRJCO3YZ3WZXNZVWW4FVQWU3TVSLD37KSQLD7FMOALB",
+    "GDL4OXKWU6BBQN35SBDSXDZ7R6I7TGN4HU5MPTWS4TF4Z3EE2AISHSNB",
+    "GCESUOEA7VND4N45UBLRQBX3EEOI4G35CDQGOEVXN3RQ4VVD6GC2BVRQ",
+    "GBQWNA5TWDQKS52MYIBHTRGSWXF2XIHNSAWWXVWJPCDJGUSEACUIUX4K",
+    "GC63ESXINGNRB4LM7TV7BTBLCUVZBFYHKCNIINOINMN7WBERA5C5UR3W",
+    "GDJ6W3GKEXOGVVKIVPWG6YYPQDAWKPXT6ZNMIYN677HBIXEXDIMAYOL6",
+    "GARPRGWULIHP2L4ZFWVE63BS64K3WWDLIFZFUDYCREFHT62PRFHKXCAW",
+    "GAWBTBBI77XRP7G2EW7OPD7OWRIBVQL7IUYGRLRPZAUURCS6HOVVAIJJ",
+    "GCL2ZS36ZITWPYE7GD3CH67T4MWMFCYEZMXV4WDR6A7PZQSNR7BPTBMJ",
+    "GBF4H5I7EFOZ565ETXS6QXJAVLZJOIYHHRWPUUC77AGEKK3KX6KSG6MW",
+    "GBWJAZLPOLKGGHZJOJJAVWZKYCB57PZEZM3CDWYV6SJUIE2MXSTWTG23",
+    "GDVLOTDKR4W2UIEVN6NXIQSPP2H3FX2ECVX6Z4FOD3QIODRRILNSFDVX",
+    "GBDHKZ5PFDZUHD2GXGTF7ULR5KTVXOYGSOCNITLTUYZKNQXILBCISOG3",
+    "GB7UFGNEKTWNWFPZ3SXBCUKPPKEU2CEVVYBE6DFBR3VHZJXW6STFJYW5",
+    "GAXTS6BZD55PN4NZNKDGGYLJUKU6DO65X36YPAEICBE6HC2OBHHJOHJX",
+    "GD6VUIYWZXOE522RTLLX72BJDHKKVHBPX2TBUNSFHWB5FTB56UJ3AYJ4",
+    "GBM5DK4X2B3LRBR6MM6XR336VES57UT3BF4MMCMBLW4RUTC2HZ53EWMM",
+    "GAGM4MMJNTOABVDYO24IZXZOLFSNROXPKEVGDVKFGLHGGGFFT33LHRI7",
+    "GB3J6XEJBFQH3XMGEFPHEPI3U2TJB56ALAJ3XBZHEMBQFIYLHD4XOL6H",
+    "GC7HENHDO4CJJCMPL737RYMFCYR7LNSU6BU2QTQKQ5CT2R5XMCJJHVDH",
+    "GAMM6K2UMF5HOA6KFW5O6PLSY3BBZQBY45VQPIVUNEF34U7VW5ZUGGVA",
+    "GBXL7DYW7RX2IYCCT6B6SUW46NK2DAGZSLGPTIGAEAS4KLLGAC76M5MN",
+    "GADTXC56FXYAQ62L6Z6QJANLHMGELQW6CMBNHCRZHJARKLJM6MD4QCH6",
+    "GDMEFZGFHFHEFWJG7RIVO7XTAXITADLEBQQZGUG7TBDEOBN2KHXCZU3C",
+    "GCJGQ7K2YA4XB6XHYVSYLPMVEN55EA2SXEJ5DSYAUO6T32IKZUQJTXQB",
+    "GBTVUHT6IJN7XAUXTK4JH44UXGAGUFVKSA4BDWZY52XOT6HOBY3KO4O7",
+    "GDNWY2XOQOVRTOBNDZA7T73QOXGZ2X5GADROH353U3VE2SAUJQZKTC6G",
+    "GCECGSB7HOIOTGAZ7WDXJF3PXDPVF35MFKTNREOBYUPRCW47J6V5UQIM",
+  ];
+
+  const rows = ["Wallet Address,Transaction Date,Transaction Link"];
+
+  for (const wallet of wallets) {
+    process.stdout.write("Fetching " + wallet.slice(0, 8) + "... ");
+    try {
+      const txs = await server
+        .transactions()
+        .forAccount(wallet)
+        .limit(10)
+        .order("desc")
+        .call();
+
+      if (txs.records.length === 0) {
+        console.log("no transactions");
+        rows.push(`${wallet},NO TRANSACTIONS,https://stellar.expert/explorer/testnet/account/${wallet}`);
+      } else {
+        for (const tx of txs.records) {
+          const link = `https://stellar.expert/explorer/testnet/tx/${tx.hash}`;
+          rows.push(`${wallet},${tx.created_at},${link}`);
+        }
+        console.log(`${txs.records.length} txs found`);
+      }
+    } catch (e) {
+      console.log("error:", e.message);
+      rows.push(`${wallet},ACCOUNT NOT FOUND,N/A`);
+    }
+    // small delay to avoid rate limiting
+    await new Promise((r) => setTimeout(r, 300));
+  }
+
+  const csv = rows.join("\n");
+  fs.writeFileSync("wallet_transactions.csv", csv, "utf8");
+  console.log("\n✅ Saved to wallet_transactions.csv");
+  console.log("Total rows:", rows.length - 1);
+});
