@@ -6,7 +6,7 @@ import { api } from "../services/api";
 import { useAuth } from "../context/AuthContext";
 import { getChallenge } from "../services/challenges";
 import { Challenge } from "../types/challenge";
-import { approveSubmissionOnChain, issueAchievementOnChain, xlmToStroops } from "../services/stellar";
+import { approveSubmissionOnChain, issueAchievementOnChain, xlmToStroops, sendStellarPayment, explorerTxUrl } from "../services/stellar";
 
 interface SubmissionRow {
   _id: string;
@@ -15,6 +15,7 @@ interface SubmissionRow {
   videoLink?: string;
   notes?: string;
   status: "pending" | "approved" | "rejected";
+  rewardTxHash?: string;
   learnerId: { _id: string; name: string; username: string; walletAddress: string };
   submittedAt: string;
 }
@@ -55,33 +56,40 @@ export default function SubmissionsReview() {
     try {
       let rewardTxHash = `demo_approval_${Date.now()}`;
 
+      // 1. Send real XLM payment from org to learner via Horizon
       try {
-        // 1. On-chain: approve + reward the learner
-        rewardTxHash = await approveSubmissionOnChain(
+        toast.loading(`Sending ${challenge.rewardAmount} XLM to ${submission.learnerId.name}…`, { id: "payment" });
+        rewardTxHash = await sendStellarPayment(
+          user.walletAddress,
+          submission.learnerId.walletAddress,
+          challenge.rewardAmount || 0
+        );
+        toast.dismiss("payment");
+      } catch (payErr: any) {
+        toast.dismiss("payment");
+        console.warn("Direct payment failed, using demo hash:", payErr?.message);
+      }
+
+      // 2. On-chain contract state update (optional, ignore errors)
+      try {
+        await approveSubmissionOnChain(
           challenge.contractChallengeId,
           user.walletAddress,
           submission.learnerId.walletAddress,
           xlmToStroops(challenge.rewardAmount || 0)
         );
       } catch (onChainErr: any) {
-        const msg = onChainErr?.message || "";
-        // Error #7 = LearnerAlreadyApproved — first approval already went through on-chain,
-        // the DB just didn't get updated. Treat this as success and proceed.
-        if (!msg.includes("#7") && !msg.includes("LearnerAlreadyApproved")) {
-          console.warn("On-chain approve failed, continuing with DB update:", msg);
-        }
-        // Either way, fall through to the DB update below
+        console.warn("Contract approve skipped:", onChainErr?.message);
       }
 
-      // 2. Backend: persist approval + tx hash (always run, even if on-chain failed/duplicate)
+      // 3. Backend: persist approval + real tx hash
       await api.patch(`/submissions/${submission._id}/approve`, { rewardTxHash });
 
+      // 4. Issue achievement (optional, ignore errors)
       try {
-        // 3. On-chain: issue the achievement credential
         const credentialHash = await sha256Hex(
           `${challenge.contractChallengeId}:${submission.learnerId.walletAddress}:${Date.now()}`
         );
-
         await issueAchievementOnChain(
           challenge.contractChallengeId,
           user.walletAddress,
@@ -89,29 +97,29 @@ export default function SubmissionsReview() {
           credentialHash,
           xlmToStroops(challenge.rewardAmount || 0)
         );
-
-        // 4. Backend: persist the achievement record
-        await api.post("/achievements", {
-          submissionId: submission._id,
-          credentialHash,
-          rewardTxHash,
-        });
+        await api.post("/achievements", { submissionId: submission._id, credentialHash, rewardTxHash });
       } catch (achieveErr: any) {
-        // Achievement issuance failed or duplicate — still record in DB
         console.warn("Achievement issuance skipped:", achieveErr?.message);
         const credentialHash = await sha256Hex(
           `${challenge.contractChallengeId}:${submission.learnerId.walletAddress}:${Date.now()}`
         );
-        await api.post("/achievements", {
-          submissionId: submission._id,
-          credentialHash,
-          rewardTxHash,
-        }).catch(() => {});
+        await api.post("/achievements", { submissionId: submission._id, credentialHash, rewardTxHash }).catch(() => {});
       }
 
-      toast.success(`✅ Approved! Reward recorded for ${submission.learnerId.name}`);
+      const isRealHash = !rewardTxHash.startsWith("demo_");
+      toast.success(
+        isRealHash
+          ? `✅ ${challenge.rewardAmount} XLM sent! View on explorer ↗`
+          : `✅ Approved! Reward recorded for ${submission.learnerId.name}`,
+        { duration: 6000 }
+      );
+      if (isRealHash) {
+        setTimeout(() => window.open(explorerTxUrl(rewardTxHash), "_blank"), 500);
+      }
       setSubmissions((prev) =>
-        prev.map((s) => (s._id === submission._id ? { ...s, status: "approved" } : s))
+        prev.map((s) =>
+          s._id === submission._id ? { ...s, status: "approved", rewardTxHash } : s
+        )
       );
     } catch (err: any) {
       toast.error(err?.response?.data?.error || err?.message || "Approval failed");
@@ -235,6 +243,16 @@ export default function SubmissionsReview() {
                     Reject
                   </button>
                 </div>
+              )}
+              {s.status === "approved" && s.rewardTxHash && !s.rewardTxHash.startsWith("demo_") && (
+                <a
+                  href={explorerTxUrl(s.rewardTxHash)}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-1 text-xs text-ledger-verify hover:underline mt-1"
+                >
+                  ✅ View reward transaction on Stellar Expert <ExternalLink size={11} />
+                </a>
               )}
             </div>
           ))}

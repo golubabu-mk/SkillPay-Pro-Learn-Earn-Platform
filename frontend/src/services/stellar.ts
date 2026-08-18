@@ -7,6 +7,8 @@ import {
   nativeToScVal,
   Address,
   Horizon,
+  Asset,
+  Operation,
 } from "@stellar/stellar-sdk";
 import { signTransaction } from "@stellar/freighter-api";
 
@@ -179,4 +181,52 @@ export async function issueAchievementOnChain(
 /** XLM (7 decimal places) to stroops, for building i128 contract args. */
 export function xlmToStroops(xlm: number): bigint {
   return BigInt(Math.round(xlm * 10_000_000));
+}
+
+/**
+ * Sends a real XLM payment from one Stellar account to another using a
+ * standard Horizon payment operation (not Soroban). Signs with Freighter
+ * and submits to Horizon. Returns the real transaction hash.
+ */
+export async function sendStellarPayment(
+  fromAddress: string,
+  toAddress: string,
+  amountXLM: number
+): Promise<string> {
+  const account = await horizonServer.loadAccount(fromAddress);
+
+  const tx = new TransactionBuilder(account, {
+    fee: BASE_FEE,
+    networkPassphrase: NETWORK_PASSPHRASE,
+  })
+    .addOperation(
+      Operation.payment({
+        destination: toAddress,
+        asset: Asset.native(),
+        amount: amountXLM.toFixed(7),
+      })
+    )
+    .setTimeout(60)
+    .build();
+
+  const signResult = await signTransaction(tx.toXDR(), {
+    networkPassphrase: NETWORK_PASSPHRASE,
+  });
+
+  if (!signResult) throw new Error("Payment signing was rejected");
+
+  const signedXdr =
+    typeof signResult === "object" && signResult !== null && "signedTxXdr" in signResult
+      ? (signResult as { signedTxXdr: string }).signedTxXdr
+      : (signResult as unknown as string);
+
+  const signedTx = TransactionBuilder.fromXDR(signedXdr, NETWORK_PASSPHRASE);
+  const result = await horizonServer.submitTransaction(signedTx);
+
+  return result.hash;
+}
+
+/** Returns a Stellar Expert testnet URL for a given transaction hash. */
+export function explorerTxUrl(txHash: string): string {
+  return `https://stellar.expert/explorer/testnet/tx/${txHash}`;
 }
