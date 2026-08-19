@@ -1,12 +1,21 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, LogOut } from "lucide-react";
-import { useState } from "react";
+import { Menu, X, LogOut, Moon, Sun, Smartphone } from "lucide-react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 
 export function Navbar() {
   const { user, logout, login, connecting, balance } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isDark, setIsDark] = useState(true);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isDark) {
+      document.documentElement.classList.add('light-theme');
+    } else {
+      document.documentElement.classList.remove('light-theme');
+    }
+  }, [isDark]);
 
   async function handleConnect() {
     try {
@@ -18,7 +27,7 @@ export function Navbar() {
   }
 
   return (
-    <header className="border-b border-ledger-line bg-ledger-bg/95 backdrop-blur sticky top-0 z-40">
+    <header className="border-b border-ledger-line bg-ledger-bg/95 backdrop-blur sticky top-0 z-40 transition-colors duration-300">
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
         <Link to="/" className="font-display text-lg text-ledger-ink tracking-tight">
           SkillPay <span className="text-ledger-seal">Pro</span>
@@ -38,6 +47,11 @@ export function Navbar() {
               Profile
             </Link>
           )}
+          {user && (
+            <Link to="/settings" className="hover:text-ledger-ink transition-colors">
+              Settings
+            </Link>
+          )}
           {user?.role === "admin" && (
             <Link to="/admin" className="hover:text-ledger-ink transition-colors">
               Admin
@@ -46,6 +60,22 @@ export function Navbar() {
         </nav>
 
         <div className="hidden md:flex items-center gap-3">
+          <button 
+            onClick={() => setIsDark(!isDark)}
+            className="text-ledger-inkMuted hover:text-ledger-ink transition-colors p-2 rounded-full hover:bg-ledger-surface"
+            title="Toggle Dark Mode"
+          >
+            {isDark ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
+          
+          <button 
+            className="text-ledger-inkMuted hover:text-ledger-ink transition-colors p-2 rounded-full hover:bg-ledger-surface hidden lg:block"
+            title="Mobile Wallet Support Guide"
+            onClick={() => alert("Mobile Wallets (like LOBSTR or Freighter mobile) can connect via WalletConnect. Scan the QR code when prompted.")}
+          >
+            <Smartphone size={18} />
+          </button>
+
           {user ? (
             <div className="flex items-center gap-3">
               <div className="font-mono text-xs text-ledger-inkMuted bg-ledger-surface px-3 py-2 rounded-seal border border-ledger-line">
@@ -76,7 +106,21 @@ export function Navbar() {
       </div>
 
       {menuOpen && (
-        <div className="md:hidden border-t border-ledger-line px-6 py-4 flex flex-col gap-4 font-mono text-xs uppercase tracking-widest text-ledger-inkMuted">
+        <div className="md:hidden border-t border-ledger-line px-6 py-4 flex flex-col gap-4 font-mono text-xs uppercase tracking-widest text-ledger-inkMuted bg-ledger-bg">
+          <button 
+            onClick={() => setIsDark(!isDark)}
+            className="flex items-center gap-2 text-left text-ledger-inkMuted"
+          >
+            {isDark ? <Sun size={18} /> : <Moon size={18} />}
+            Toggle Theme
+          </button>
+          <button 
+            onClick={() => alert("Mobile Wallets (like LOBSTR or Freighter mobile) can connect via WalletConnect. Scan the QR code when prompted.")}
+            className="flex items-center gap-2 text-left text-ledger-inkMuted"
+          >
+            <Smartphone size={18} />
+            Mobile Wallet Guide
+          </button>
           <Link to="/challenges" onClick={() => setMenuOpen(false)}>
             Challenges
           </Link>
