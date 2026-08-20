@@ -150,7 +150,7 @@ export default function Dashboard() {
                       <td className="px-4 py-3 font-mono text-ledger-inkMuted">
                         {s.challengeId?.rewardAmount} XLM <span className="text-[10px] text-ledger-inkMuted/70 ml-1">(~${((s.challengeId?.rewardAmount || 0) * 0.12).toFixed(2)})</span>
                       </td>
-                      <td className="px-4 py-3">
+                      <td className="px-4 py-3 flex items-center gap-3">
                         <span
                           className={`font-mono text-[11px] uppercase tracking-widest px-2 py-0.5 rounded-seal border ${
                             s.status === "approved"
@@ -162,6 +162,18 @@ export default function Dashboard() {
                         >
                           {s.status}
                         </span>
+                        {s.status === "approved" && (
+                          <a
+                            href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.origin)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-[10px] text-ledger-inkMuted hover:text-[#0a66c2] transition-colors flex items-center gap-1 border border-ledger-line px-2 py-0.5 rounded-seal"
+                            title="Share Credential on LinkedIn"
+                          >
+                            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                            Share
+                          </a>
+                        )}
                       </td>
                     </tr>
                   ))}
