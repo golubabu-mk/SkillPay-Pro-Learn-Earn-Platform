@@ -57,7 +57,7 @@ export function ChallengeCard({ challenge }: { challenge: Challenge }) {
       <div className="mb-3">
         <div className="flex items-baseline justify-between mb-1">
           <span className="font-mono text-sm text-ledger-ink">
-            {(challenge.rewardAmount || 0).toLocaleString()} XLM
+            {(challenge.rewardAmount || 0).toLocaleString()} XLM <span className="text-[10px] text-ledger-inkMuted/70 ml-1">(~${((challenge.rewardAmount || 0) * 0.12).toFixed(2)})</span>
             <span className="text-ledger-inkMuted"> / winner</span>
           </span>
           <span className="font-mono text-[11px] text-ledger-inkMuted">{poolUsedPct}% allocated</span>

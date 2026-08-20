@@ -54,7 +54,7 @@ export default function ChallengeDetail() {
           <p className="font-mono text-[10px] uppercase tracking-widest text-ledger-inkMuted mb-1">
             Reward
           </p>
-          <p className="font-display text-lg text-ledger-seal">{challenge.rewardAmount} XLM</p>
+          <p className="font-display text-lg text-ledger-seal">{challenge.rewardAmount} XLM <span className="text-sm text-ledger-inkMuted ml-2">(~${(challenge.rewardAmount * 0.12).toFixed(2)})</span></p>
         </div>
         <div>
           <p className="font-mono text-[10px] uppercase tracking-widest text-ledger-inkMuted mb-1 flex items-center gap-1">

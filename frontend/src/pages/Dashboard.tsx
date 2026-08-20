@@ -148,7 +148,7 @@ export default function Dashboard() {
                     <tr key={s._id} className="border-t border-ledger-line">
                       <td className="px-4 py-3 text-ledger-ink">{s.challengeId?.title}</td>
                       <td className="px-4 py-3 font-mono text-ledger-inkMuted">
-                        {s.challengeId?.rewardAmount} XLM
+                        {s.challengeId?.rewardAmount} XLM <span className="text-[10px] text-ledger-inkMuted/70 ml-1">(~${((s.challengeId?.rewardAmount || 0) * 0.12).toFixed(2)})</span>
                       </td>
                       <td className="px-4 py-3">
                         <span
