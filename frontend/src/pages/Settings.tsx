@@ -105,6 +105,19 @@ export default function Settings() {
           />
         </div>
 
+        <div>
+          <label className="flex items-center gap-3 cursor-pointer">
+            <input 
+              type="checkbox" 
+              className="accent-ledger-seal w-4 h-4 cursor-pointer bg-ledger-surface border-ledger-line"
+              defaultChecked 
+            />
+            <span className="font-mono text-[11px] uppercase tracking-widest text-ledger-inkMuted">
+              Receive email notifications for new challenges
+            </span>
+          </label>
+        </div>
+
         <button
           type="submit"
           disabled={saving}
