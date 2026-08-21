@@ -4,10 +4,11 @@
 
 **Status:** 🚧 Level 4 MVP build in progress
 
-- **Live Platform**: [skillpay-pro.vercel.app](#)
-- **Demo Video**: [Watch the Demo](#)
-- **Pitch Deck (PPT)**: [SkillPay Pro Pitch Deck](#)
+- **Live Platform**: [skillpay-pro.vercel.app](https://skillpay-pro.vercel.app)
+- **Demo Video**: [Watch the Demo](https://drive.google.com/file/d/1kRDJxKesIEV0gmKXhfv-F6DkYPzrqmOg/view?usp=sharing)
+- **Contract Deployment Address**: `[Update with actual address]`
 - **User Feedback Form**: [SkillPay Feedback Form](https://docs.google.com/forms/d/e/1FAIpQLSc9SKIn_Nx4FCPGe27JvFnujo-IWdw93wjn8JMbZP3X7tGkBw/viewform?usp=dialog)
+- **User Feedback Responses**: [View Responses Sheet](https://docs.google.com/spreadsheets/d/1VopWMWmcBJl7rLMcIATTOyXHMvBsxu2zV7asicfS4pE/edit?usp=drivesdk)
 
 ---
 
@@ -62,11 +63,15 @@ contracts/  Soroban (Rust) — the reward and achievement contract + tests
 
 ### Product UI
 - **Dashboard Overview**:
-  ![Dashboard Screenshot](#)
+  ![Dashboard Screenshot](./images/product_UI.png)
 
 ### Mobile Responsive Design
 - **Mobile View**: Fully responsive across all devices.
-  ![Mobile Design](#)
+  ![Mobile Design](./images/mobile_responsive.png)
+
+### Analytics Dashboard
+- **PostHog Live Telemetry**:
+  ![Analytics Dashboard](./images/analytics.png)
 
 ## Onchain Proof of Wallet Interactions
 
