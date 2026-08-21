@@ -6,7 +6,7 @@
 
 - **Live Platform**: [skillpay-pro.vercel.app](https://skillpay-pro.vercel.app)
 - **Demo Video**: [Watch the Demo](https://drive.google.com/file/d/1kRDJxKesIEV0gmKXhfv-F6DkYPzrqmOg/view?usp=sharing)
-- **Contract Deployment Address**: `[Update with actual address]`
+- **Contract Deployment Address**: `CAUDS5P2YYQECNBUJMYFAWVC6CJX65MYS527V6F3QTP7ENHAHTQQFXHQ`
 - **User Feedback Form**: [SkillPay Feedback Form](https://docs.google.com/forms/d/e/1FAIpQLSc9SKIn_Nx4FCPGe27JvFnujo-IWdw93wjn8JMbZP3X7tGkBw/viewform?usp=dialog)
 - **User Feedback Responses**: [View Responses Sheet](https://docs.google.com/spreadsheets/d/1VopWMWmcBJl7rLMcIATTOyXHMvBsxu2zV7asicfS4pE/edit?usp=drivesdk)
 
@@ -94,13 +94,7 @@ Below is the verified ledger of 12 real testnet transactions, showing organizati
 
 ---
 
-## 9. User Growth Metrics (Level 4)
-
-- **Total Users Onboarded**: 12+
-- **Real Transactions Processed**: 12+
-- **Average User Satisfaction**: 4.7/5
-
-### Users Onboarded
+## 9. Users Onboarded
 
 | User ID | Name | Email | Wallet Address | Feedback Summary |
 |---|---|---|---|---|
