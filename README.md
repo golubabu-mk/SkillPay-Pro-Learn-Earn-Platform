@@ -2,8 +2,6 @@
 
 > A production-ready Stellar dApp where organizations create learning challenges, learners submit proof of work, earn instant testnet rewards, and receive verifiable on-chain achievement credentials.
 
-**Status:** 🚧 Level 4 MVP build in progress
-
 - **Live Platform**: [skillpay-pro.vercel.app](https://skillpay-pro.vercel.app)
 - **Demo Video**: [Watch the Demo](https://drive.google.com/file/d/1kRDJxKesIEV0gmKXhfv-F6DkYPzrqmOg/view?usp=sharing)
 - **Contract Deployment Address**: `CDT2WZFQ2IK5ZEEMAL72T7PKZ3U7CEV33AEUNFQKOCZEK3IO3SQGESA3`
