@@ -64,6 +64,7 @@ export function Navbar() {
             onClick={() => setIsDark(!isDark)}
             className="text-ledger-inkMuted hover:text-ledger-ink transition-colors p-2 rounded-full hover:bg-ledger-surface"
             title="Toggle Dark Mode"
+            aria-label="Toggle Dark Mode"
           >
             {isDark ? <Sun size={18} /> : <Moon size={18} />}
           </button>
