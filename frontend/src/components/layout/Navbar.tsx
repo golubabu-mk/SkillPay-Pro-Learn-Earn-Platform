@@ -80,7 +80,7 @@ export function Navbar() {
           {user ? (
             <div className="flex items-center gap-3">
               <div className="font-mono text-xs text-ledger-inkMuted bg-ledger-surface px-3 py-2 rounded-seal border border-ledger-line flex items-center">
-                {Number(balance).toFixed(2)} XLM <span className="text-[10px] text-ledger-inkMuted/70 ml-1">(~${(Number(balance) * 0.12).toFixed(2)})</span>
+                {Number(balance).toFixed(2)} XLM <span className="text-[10px] text-ledger-inkMuted/70 ml-1">(~${(Number(balance) * 0.15).toFixed(2)})</span>
               </div>
               <button
                 onClick={logout}
