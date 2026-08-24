@@ -102,14 +102,24 @@ export default function PublicProfile() {
                   </p>
                 </div>
               </div>
-              <a
-                href={`https://stellar.expert/explorer/testnet/tx/${a.rewardTxHash}`}
+              <div className="flex items-center gap-3 mt-2">
+                <a
+                  href={`https://stellar.expert/explorer/testnet/tx/${a.rewardTxHash}`}
                 target="_blank"
                 rel="noreferrer"
                 className="font-mono text-[11px] text-ledger-seal hover:underline"
               >
                 Verify on-chain →
-              </a>
+                </a>
+                <a
+                  href={`https://www.linkedin.com/profile/add?startTask=${encodeURIComponent(a.title)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="font-mono text-[11px] text-[#0077b5] hover:underline flex items-center gap-1"
+                >
+                  Share on LinkedIn
+                </a>
+              </div>
             </div>
           ))}
         </div>
