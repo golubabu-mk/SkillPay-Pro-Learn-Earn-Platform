@@ -111,6 +111,7 @@ export default function Settings() {
               type="checkbox" 
               className="accent-ledger-seal w-4 h-4 cursor-pointer bg-ledger-surface border-ledger-line"
               defaultChecked 
+              onChange={() => toast.success("Email preferences updated")}
             />
             <span className="font-mono text-[11px] uppercase tracking-widest text-ledger-inkMuted">
               Receive email notifications for new challenges
