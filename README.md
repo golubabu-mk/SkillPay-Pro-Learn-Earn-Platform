@@ -121,11 +121,11 @@ We actively listen to our early adopters! We have aggregated the feedback from o
 
 | User ID | Name | Email | Wallet Address | Feedback Summary | Improvement Made | Git Commit Link |
 |---|---|---|---|---|---|---|
-| USR-006 | Kavya Reddy | kavyareddy71@gmail.com | GDJ6W3GKEXOGVVKIVPWG6YYPQDAWKPXT6ZNMIYN677HBIXEXDIMAYOL6 | Add a dark mode toggle because staring at a bright white screen... | Added Dark Mode Toggle | [`049dccb`](https://github.com/golubabu-mk/SkillPay-Pro-Learn-Earn-Achievement-Platform/commit/049dccb) |
-| USR-009 | Vikram Joshi | vikramjoshi56@gmail.com | GCL2ZS36ZITWPYE7GD3CH67T4MWMFCYEZMXV4WDR6A7PZQSNR7BPTBMJ | Show token usd value | Added USD Token Value Display | [`4447be0`](https://github.com/golubabu-mk/SkillPay-Pro-Learn-Earn-Achievement-Platform/commit/4447be0) |
-| USR-008 | Ananya Iyer | ananyaiyer19@gmail.com | GAWBTBBI77XRP7G2EW7OPD7OWRIBVQL7IUYGRLRPZAUURCS6HOVVAIJJ | Export credential to linkedin directly from the dashboard so that... | Added LinkedIn Export Button | [`a7039f0`](https://github.com/golubabu-mk/SkillPay-Pro-Learn-Earn-Achievement-Platform/commit/a7039f0) |
-| USR-005 | Aditya Verma | adityaverma45@gmail.com | GC63ESXINGNRB4LM7TV7BTBLCUVZBFYHKCNIINOINMN7WBERA5C5UR3W | Support mobile wallets better | Added Mobile Wallet Support Guide | [`76a922b`](https://github.com/golubabu-mk/SkillPay-Pro-Learn-Earn-Achievement-Platform/commit/76a922b) |
-| USR-011 | Arjun Kapoor | arjunkapoor77@gmail.com | GBWJAZLPOLKGGHZJOJJAVWZKYCB57PZEZM3CDWYV6SJUIE2MXSTWTG23 | Email notifications for new challenges | Added Email Notifications Toggle | [`54ab419`](https://github.com/golubabu-mk/SkillPay-Pro-Learn-Earn-Achievement-Platform/commit/54ab419) |
+| USR-006 | Kavya Reddy | kavyareddy71@gmail.com | GDJ6W3GKEXOGVVKIVPWG6YYPQDAWKPXT6ZNMIYN677HBIXEXDIMAYOL6 | Add a dark mode toggle because staring at a bright white screen... | Added Dark Mode Toggle | [`814ee6d`](https://github.com/golubabu-mk/SkillPay-Pro-Learn-Earn-Achievement-Platform/commit/814ee6d) |
+| USR-009 | Vikram Joshi | vikramjoshi56@gmail.com | GCL2ZS36ZITWPYE7GD3CH67T4MWMFCYEZMXV4WDR6A7PZQSNR7BPTBMJ | Show token usd value | Added USD Token Value Display | [`54201d1`](https://github.com/golubabu-mk/SkillPay-Pro-Learn-Earn-Achievement-Platform/commit/54201d1) |
+| USR-008 | Ananya Iyer | ananyaiyer19@gmail.com | GAWBTBBI77XRP7G2EW7OPD7OWRIBVQL7IUYGRLRPZAUURCS6HOVVAIJJ | Export credential to linkedin directly from the dashboard so that... | Added LinkedIn Export Button | [`eef66ae`](https://github.com/golubabu-mk/SkillPay-Pro-Learn-Earn-Achievement-Platform/commit/eef66ae) |
+| USR-005 | Aditya Verma | adityaverma45@gmail.com | GC63ESXINGNRB4LM7TV7BTBLCUVZBFYHKCNIINOINMN7WBERA5C5UR3W | Support mobile wallets better | Added Mobile Wallet Support Guide | [`ecc9a1b`](https://github.com/golubabu-mk/SkillPay-Pro-Learn-Earn-Achievement-Platform/commit/ecc9a1b) |
+| USR-011 | Arjun Kapoor | arjunkapoor77@gmail.com | GBWJAZLPOLKGGHZJOJJAVWZKYCB57PZEZM3CDWYV6SJUIE2MXSTWTG23 | Email notifications for new challenges | Added Email Notifications Toggle | [`7f9b2bf`](https://github.com/golubabu-mk/SkillPay-Pro-Learn-Earn-Achievement-Platform/commit/7f9b2bf) |
 
 ---
 
