@@ -72,7 +72,8 @@ export function Navbar() {
           <button 
             className="text-ledger-inkMuted hover:text-ledger-ink transition-colors p-2 rounded-full hover:bg-ledger-surface hidden lg:block"
             title="Mobile Wallet Support Guide"
-            onClick={() => alert("Mobile Wallets (like LOBSTR or Freighter mobile) can connect via WalletConnect. Scan the QR code when prompted.")}
+            aria-label="Mobile Wallet Guide"
+            onClick={() => alert("Mobile Wallets (like LOBSTR, Albedo, or Freighter mobile) can connect via WalletConnect. Scan the QR code when prompted.")}
           >
             <Smartphone size={18} />
           </button>
