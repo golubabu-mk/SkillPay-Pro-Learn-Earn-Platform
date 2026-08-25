@@ -7,6 +7,7 @@ export function Navbar() {
   const { user, logout, login, connecting, balance } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const [isDark, setIsDark] = useState(true);
+  const [showBalance, setShowBalance] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
