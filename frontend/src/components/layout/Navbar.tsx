@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, LogOut, Moon, Sun, Smartphone } from "lucide-react";
+import { Menu, X, LogOut, Moon, Sun, Smartphone, Copy, Eye, EyeOff } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 
@@ -84,6 +84,16 @@ export function Navbar() {
                 {Number(balance).toFixed(2)} XLM <span className="text-[10px] text-ledger-inkMuted/70 ml-1">(~${(Number(balance) * 0.15).toFixed(2)})</span>
               </div>
               <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(user.walletAddress);
+                    alert("Wallet address copied to clipboard!");
+                  }}
+                  className="mr-2 text-ledger-inkMuted hover:text-ledger-ink transition-colors"
+                  title="Copy Wallet Address"
+                >
+                  <Copy size={13} />
+                </button>
+                <button
                 onClick={logout}
                 className="flex items-center gap-1.5 font-mono text-xs uppercase tracking-widest border border-ledger-line px-3 py-2 rounded-seal text-ledger-inkMuted hover:border-ledger-alert hover:text-ledger-alert transition-colors"
               >
