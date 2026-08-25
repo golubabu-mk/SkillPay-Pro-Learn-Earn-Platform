@@ -2,11 +2,14 @@
 
 > A production-ready Stellar dApp where organizations create learning challenges, learners submit proof of work, earn instant testnet rewards, and receive verifiable on-chain achievement credentials.
 
+## 🚀 Quick Links
 - **Live Platform**: [skillpay-pro.vercel.app](https://skillpay-pro.vercel.app)
+- **Pitch Deck / Presentation**: [View Pitch Deck (PDF)](#) *(Replace with Canva/Google Slides link)*
 - **Demo Video**: [Watch the Demo](https://drive.google.com/file/d/1kRDJxKesIEV0gmKXhfv-F6DkYPzrqmOg/view?usp=sharing)
 - **Contract Deployment Address**: `CDT2WZFQ2IK5ZEEMAL72T7PKZ3U7CEV33AEUNFQKOCZEK3IO3SQGESA3`
 - **User Feedback Form**: [SkillPay Feedback Form](https://docs.google.com/forms/d/e/1FAIpQLSc9SKIn_Nx4FCPGe27JvFnujo-IWdw93wjn8JMbZP3X7tGkBw/viewform?usp=dialog)
 - **User Feedback Responses**: [View Responses Sheet](https://docs.google.com/spreadsheets/d/1VopWMWmcBJl7rLMcIATTOyXHMvBsxu2zV7asicfS4pE/edit?usp=drivesdk)
+- **User Feedback Data**: [📥 Download Responses Excel Sheet](./user_feedback_responses.csv)
 
 ---
 
