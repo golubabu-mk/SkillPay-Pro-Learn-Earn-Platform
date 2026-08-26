@@ -116,7 +116,7 @@ Below is the verified ledger of 12 real testnet transactions, showing organizati
 
 ## 10. Product Improvements & User Feedback Summary
 
-We actively listen to our early adopters! We have aggregated the feedback from our initial cohort of 12+ onboarded users and implemented several core improvements to hit production quality standards. 
+We actively listen to our early adopters! We have aggregated the feedback from our initial cohort of 51 onboarded users and implemented several core improvements to hit production quality standards. 
 
 👉 **[View the complete User Feedback Summary & Implementation Tracker here](./feedback_summary.md)**
 
