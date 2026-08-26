@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, LogOut, Moon, Sun, Smartphone, Copy, Eye, EyeOff } from "lucide-react";
+import { Menu, X, LogOut, Moon, Sun, Smartphone, Copy, Eye, EyeOff, User } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 
@@ -81,6 +81,9 @@ export function Navbar() {
 
           {user ? (
             <div className="flex items-center gap-3">
+              <div className="bg-ledger-surface p-1.5 rounded-full border border-ledger-line text-ledger-inkMuted" title="User Profile">
+                <User size={16} />
+              </div>
               <div className="font-mono text-xs text-ledger-inkMuted bg-ledger-surface px-3 py-2 rounded-seal border border-ledger-line flex items-center">
                 {Number(balance).toFixed(2)} XLM <span className="text-[10px] text-ledger-inkMuted/70 ml-1">(~${(Number(balance) * 0.15).toFixed(2)})</span>
               </div>
