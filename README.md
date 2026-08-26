@@ -4,7 +4,7 @@
 
 ## 🚀 Quick Links
 - **Live Platform**: [skillpay-pro.vercel.app](https://skillpay-pro.vercel.app)
-- **Pitch Deck / Presentation**: [View Pitch Deck (PDF)](#) *(Replace with Canva/Google Slides link)*
+- **Pitch Deck / Presentation**: [View Pitch Deck (Google Slides)](https://docs.google.com/presentation/d/1PMmjSJns8PCGutW3FhCXSFhlZm5OjtpB/edit?usp=sharing&ouid=114494973489055894068&rtpof=true&sd=true)
 - **Demo Video**: [Watch the Demo](https://drive.google.com/file/d/1kRDJxKesIEV0gmKXhfv-F6DkYPzrqmOg/view?usp=sharing)
 - **Contract Deployment Address**: `CDT2WZFQ2IK5ZEEMAL72T7PKZ3U7CEV33AEUNFQKOCZEK3IO3SQGESA3`
 - **User Feedback Form**: [SkillPay Feedback Form](https://docs.google.com/forms/d/e/1FAIpQLSc9SKIn_Nx4FCPGe27JvFnujo-IWdw93wjn8JMbZP3X7tGkBw/viewform?usp=dialog)
