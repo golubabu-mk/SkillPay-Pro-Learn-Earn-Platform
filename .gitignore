@@ -10,3 +10,17 @@ Cargo.lock
 .vercel
 frontend/.env
 backend/.env
+
+# Bot generation scripts
+*.js
+!frontend/
+!backend/
+*.csv
+form_payloads*.json
+valid_wallet_hashes*.json
+hashes.json
+new_wallet_hashes.json
+debug_form.png
+readme_*_table.md
+error.html
+
