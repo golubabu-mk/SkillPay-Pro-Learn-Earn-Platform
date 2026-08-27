@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Users, Clock, ShieldCheck } from "lucide-react";
+import { Users, Clock, ShieldCheck, Bookmark } from "lucide-react";
 import { Challenge, OrganizationSummary } from "../../types/challenge";
 
 const DIFFICULTY_LABEL: Record<string, string> = {
@@ -15,6 +16,7 @@ function daysRemaining(deadline: string): number {
 }
 
 export function ChallengeCard({ challenge }: { challenge: Challenge }) {
+  const [bookmarked, setBookmarked] = useState(false);
   const org = challenge.organizationId as OrganizationSummary;
   const orgName = org && typeof org === "object" ? org.name : "Organization";
   const orgVerified = org && typeof org === "object" ? org.verified : false;
@@ -32,15 +34,24 @@ export function ChallengeCard({ challenge }: { challenge: Challenge }) {
         <span className="font-mono text-[11px] uppercase tracking-widest text-ledger-inkMuted">
           {challenge.category} · {DIFFICULTY_LABEL[challenge.difficulty]}
         </span>
-        <span
-          className={`font-mono text-[11px] uppercase tracking-widest px-2 py-0.5 rounded-seal border ${
-            days === 0
-              ? "border-ledger-alert/50 text-ledger-alert"
-              : "border-ledger-line text-ledger-inkMuted"
-          }`}
-        >
-          {days === 0 ? "Closing" : `${days}d left`}
-        </span>
+        <div className="flex items-center gap-2">
+          <span
+            className={`font-mono text-[11px] uppercase tracking-widest px-2 py-0.5 rounded-seal border ${
+              days === 0
+                ? "border-ledger-alert/50 text-ledger-alert"
+                : "border-ledger-line text-ledger-inkMuted"
+            }`}
+          >
+            {days === 0 ? "Closing" : `${days}d left`}
+          </span>
+          <button 
+            onClick={(e) => { e.preventDefault(); setBookmarked(!bookmarked); }} 
+            className={`p-1 rounded-full transition-colors ${bookmarked ? "text-ledger-seal bg-ledger-seal/10" : "text-ledger-inkMuted hover:text-ledger-ink"}`}
+            title="Bookmark Challenge"
+          >
+            <Bookmark size={14} fill={bookmarked ? "currentColor" : "none"} />
+          </button>
+        </div>
       </div>
 
       <h3 className="font-display text-xl text-ledger-ink mb-1.5 group-hover:text-ledger-seal transition-colors">
