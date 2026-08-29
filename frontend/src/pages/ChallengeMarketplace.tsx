@@ -14,6 +14,7 @@ export default function ChallengeMarketplace() {
   const [category, setCategory] = useState("All");
   const [difficulty, setDifficulty] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
+  const [sortOption, setSortOption] = useState("newest");
 
   useEffect(() => {
     setLoading(true);
@@ -30,7 +31,12 @@ export default function ChallengeMarketplace() {
   const filteredChallenges = challenges.filter(c => 
     c.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
     c.description.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  ).sort((a, b) => {
+    if (sortOption === "reward-high") return b.rewardAmount - a.rewardAmount;
+    if (sortOption === "reward-low") return a.rewardAmount - b.rewardAmount;
+    if (sortOption === "deadline") return new Date(a.deadline).getTime() - new Date(b.deadline).getTime();
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(); // newest
+  });
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-12">
@@ -44,15 +50,27 @@ export default function ChallengeMarketplace() {
         </p>
       </div>
 
-      <div className="mb-6 relative">
-        <Search className="absolute left-3 top-2.5 text-ledger-inkMuted" size={18} />
-        <input 
-          type="text" 
-          placeholder="Search challenges by title or description..." 
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full bg-ledger-surface border border-ledger-line rounded-seal py-2 pl-10 pr-4 text-sm text-ledger-ink focus:outline-none focus:border-ledger-seal transition-colors"
-        />
+      <div className="flex flex-col md:flex-row gap-4 mb-6 relative">
+        <div className="relative flex-grow">
+          <Search className="absolute left-3 top-2.5 text-ledger-inkMuted" size={18} />
+          <input 
+            type="text" 
+            placeholder="Search challenges by title or description..." 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full bg-ledger-surface border border-ledger-line rounded-seal py-2 pl-10 pr-4 text-sm text-ledger-ink focus:outline-none focus:border-ledger-seal transition-colors"
+          />
+        </div>
+        <select
+          value={sortOption}
+          onChange={(e) => setSortOption(e.target.value)}
+          className="bg-ledger-surface border border-ledger-line rounded-seal py-2 px-4 text-sm text-ledger-ink focus:outline-none focus:border-ledger-seal transition-colors"
+        >
+          <option value="newest">Sort by: Newest</option>
+          <option value="reward-high">Sort by: Reward (High to Low)</option>
+          <option value="reward-low">Sort by: Reward (Low to High)</option>
+          <option value="deadline">Sort by: Closing Soon</option>
+        </select>
       </div>
 
       <div className="flex flex-wrap gap-2 mb-8">
