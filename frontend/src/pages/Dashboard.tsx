@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Plus } from "lucide-react";
+import { Plus, Download } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { api } from "../services/api";
 import { Challenge } from "../types/challenge";
@@ -18,6 +18,24 @@ export default function Dashboard() {
   const [mySubmissions, setMySubmissions] = useState<MySubmission[]>([]);
   const [pendingCounts, setPendingCounts] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(true);
+
+  const exportToCSV = () => {
+    let csv = "";
+    if (user?.role === "organization") {
+      csv = "Challenge,Total Reward,Remaining,Deadline\n" + 
+        orgChallenges.map(c => `"${c.title}",${c.totalRewardPool},${c.remainingRewardPool},${c.deadline}`).join("\n");
+    } else {
+      csv = "Challenge,Reward (XLM),Status\n" + 
+        mySubmissions.map(s => `"${s.challengeId?.title}",${s.challengeId?.rewardAmount},${s.status}`).join("\n");
+    }
+    
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.setAttribute('href', url);
+    a.setAttribute('download', `${user?.role}_history.csv`);
+    a.click();
+  };
 
   useEffect(() => {
     if (!user) return;
@@ -71,14 +89,22 @@ export default function Dashboard() {
           </span>
           <h1 className="font-display text-3xl text-ledger-ink mt-1">Welcome back, {user.name}</h1>
         </div>
-        {user.role === "organization" && (
-          <Link
-            to="/create-challenge"
-            className="flex items-center gap-1.5 font-mono text-xs uppercase tracking-widest bg-ledger-seal text-ledger-bg px-4 py-2.5 rounded-seal hover:bg-ledger-seal/90 transition-colors"
+        <div className="flex gap-2">
+          <button
+            onClick={exportToCSV}
+            className="flex items-center gap-1.5 font-mono text-xs uppercase tracking-widest border border-ledger-line text-ledger-ink px-4 py-2.5 rounded-seal hover:bg-ledger-surface transition-colors"
           >
-            <Plus size={14} /> New challenge
-          </Link>
-        )}
+            <Download size={14} /> Export CSV
+          </button>
+          {user.role === "organization" && (
+            <Link
+              to="/create-challenge"
+              className="flex items-center gap-1.5 font-mono text-xs uppercase tracking-widest bg-ledger-seal text-ledger-bg px-4 py-2.5 rounded-seal hover:bg-ledger-seal/90 transition-colors"
+            >
+              <Plus size={14} /> New challenge
+            </Link>
+          )}
+        </div>
       </div>
 
       {loading && <p className="text-ledger-inkMuted text-sm">Loading…</p>}
