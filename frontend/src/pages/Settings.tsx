@@ -14,6 +14,9 @@ export default function Settings() {
   const [name, setName] = useState(user?.name === "New User" ? "" : user?.name || "");
   const [bio, setBio] = useState("");
   const [saving, setSaving] = useState(false);
+  const [avatar, setAvatar] = useState(localStorage.getItem("skillpay_avatar") || "1");
+
+  const avatars = ["1", "2", "3", "4"];
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -21,6 +24,8 @@ export default function Settings() {
     try {
       const { data } = await api.patch("/users/profile", { role, username, name, bio });
       if (data.token) localStorage.setItem("skillpay_token", data.token);
+      localStorage.setItem("skillpay_avatar", avatar);
+      window.dispatchEvent(new Event("avatar-changed"));
       await refreshUser();
       toast.success("Profile saved");
       navigate("/dashboard");
@@ -64,6 +69,26 @@ export default function Settings() {
                 }`}
               >
                 {r}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <label className="block font-mono text-[11px] uppercase tracking-widest text-ledger-inkMuted mb-2">
+            Select Avatar
+          </label>
+          <div className="flex gap-4">
+            {avatars.map((av) => (
+              <button
+                key={av}
+                type="button"
+                onClick={() => setAvatar(av)}
+                className={`w-12 h-12 rounded-full border-2 overflow-hidden transition-all ${
+                  avatar === av ? "border-ledger-seal scale-110" : "border-transparent opacity-60 hover:opacity-100"
+                }`}
+              >
+                <img src={`https://api.dicebear.com/7.x/bottts/svg?seed=${av}`} alt="Avatar" />
               </button>
             ))}
           </div>

@@ -8,7 +8,14 @@ export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isDark, setIsDark] = useState(true);
   const [showBalance, setShowBalance] = useState(true);
+  const [avatar, setAvatar] = useState(localStorage.getItem("skillpay_avatar") || "1");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleAvatarChange = () => setAvatar(localStorage.getItem("skillpay_avatar") || "1");
+    window.addEventListener("avatar-changed", handleAvatarChange);
+    return () => window.removeEventListener("avatar-changed", handleAvatarChange);
+  }, []);
 
   useEffect(() => {
     if (!isDark) {
@@ -84,8 +91,12 @@ export function Navbar() {
 
           {user ? (
             <div className="flex items-center gap-3">
-              <div className="bg-ledger-surface p-1.5 rounded-full border border-ledger-line text-ledger-inkMuted" title="User Profile">
-                <User size={16} />
+              <div className="bg-ledger-surface p-1 rounded-full border border-ledger-line text-ledger-inkMuted w-8 h-8 flex items-center justify-center overflow-hidden" title="User Profile">
+                {localStorage.getItem("skillpay_avatar") ? (
+                  <img src={`https://api.dicebear.com/7.x/bottts/svg?seed=${avatar}`} alt="Avatar" className="w-full h-full" />
+                ) : (
+                  <User size={16} />
+                )}
               </div>
               <div className="font-mono text-xs text-ledger-inkMuted bg-ledger-surface px-3 py-2 rounded-seal border border-ledger-line flex items-center">
                 {Number(balance).toFixed(2)} XLM <span className="text-[10px] text-ledger-inkMuted/70 ml-1">(~${(Number(balance) * 0.15).toFixed(2)})</span>
