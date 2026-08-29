@@ -11,6 +11,7 @@ import PublicProfile from "./pages/PublicProfile";
 import Settings from "./pages/Settings";
 import Feedback from "./pages/Feedback";
 import Admin from "./pages/Admin";
+import FAQ from "./pages/FAQ";
 
 function NotFound() {
   return (
@@ -39,6 +40,7 @@ export default function App() {
             <Route path="/settings" element={<Settings />} />
             <Route path="/feedback" element={<Feedback />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/faq" element={<FAQ />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

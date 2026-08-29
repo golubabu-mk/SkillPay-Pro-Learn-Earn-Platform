@@ -58,6 +58,9 @@ export function Navbar() {
               Admin
             </Link>
           )}
+          <Link to="/faq" className="hover:text-ledger-ink transition-colors">
+            FAQ
+          </Link>
         </nav>
 
         <div className="hidden md:flex items-center gap-3">
@@ -145,6 +148,14 @@ export function Navbar() {
               Dashboard
             </Link>
           )}
+          {user?.role === "admin" && (
+            <Link to="/admin" onClick={() => setMenuOpen(false)}>
+              Admin
+            </Link>
+          )}
+          <Link to="/faq" onClick={() => setMenuOpen(false)}>
+            FAQ
+          </Link>
           {user ? (
             <button onClick={logout} className="text-left text-ledger-alert">
               Disconnect
