@@ -17,6 +17,7 @@ export interface Challenge {
   category: string;
   difficulty: ChallengeDifficulty;
   rewardAmount: number;
+  rewardCurrency?: "XLM" | "USDC";
   totalRewardPool: number;
   remainingRewardPool: number;
   maxWinners: number;
@@ -35,6 +36,7 @@ export interface CreateChallengeInput {
   category: string;
   difficulty: ChallengeDifficulty;
   rewardAmount: number;
+  rewardCurrency?: "XLM" | "USDC";
   totalRewardPool: number;
   maxWinners: number;
   deadline: string; // ISO date

@@ -19,6 +19,7 @@ export default function CreateChallenge() {
     category: "Web Development",
     difficulty: "intermediate" as ChallengeDifficulty,
     rewardAmount: 50,
+    rewardCurrency: "XLM",
     maxWinners: 5,
     deadline: "",
     requirements: "",
@@ -83,7 +84,7 @@ export default function CreateChallenge() {
             required
             value={form.title}
             onChange={(e) => setForm({ ...form, title: e.target.value })}
-            className="w-full bg-ledger-surface border border-ledger-line rounded-seal px-3 py-2.5 text-sm text-ledger-ink focus:border-ledger-seal outline-none"
+            className="w-full flex-grow bg-ledger-surface border border-ledger-line rounded-seal px-3 py-2.5 text-sm text-ledger-ink focus:border-ledger-seal outline-none"
             placeholder="Build a Soroban token contract"
           />
         </div>
@@ -97,7 +98,7 @@ export default function CreateChallenge() {
             rows={4}
             value={form.description}
             onChange={(e) => setForm({ ...form, description: e.target.value })}
-            className="w-full bg-ledger-surface border border-ledger-line rounded-seal px-3 py-2.5 text-sm text-ledger-ink focus:border-ledger-seal outline-none resize-none"
+            className="w-full flex-grow bg-ledger-surface border border-ledger-line rounded-seal px-3 py-2.5 text-sm text-ledger-ink focus:border-ledger-seal outline-none resize-none"
           />
         </div>
 
@@ -110,7 +111,7 @@ export default function CreateChallenge() {
               required
               value={form.category}
               onChange={(e) => setForm({ ...form, category: e.target.value })}
-              className="w-full bg-ledger-surface border border-ledger-line rounded-seal px-3 py-2.5 text-sm text-ledger-ink focus:border-ledger-seal outline-none"
+              className="w-full flex-grow bg-ledger-surface border border-ledger-line rounded-seal px-3 py-2.5 text-sm text-ledger-ink focus:border-ledger-seal outline-none"
             />
           </div>
           <div>
@@ -122,7 +123,7 @@ export default function CreateChallenge() {
               onChange={(e) =>
                 setForm({ ...form, difficulty: e.target.value as ChallengeDifficulty })
               }
-              className="w-full bg-ledger-surface border border-ledger-line rounded-seal px-3 py-2.5 text-sm text-ledger-ink focus:border-ledger-seal outline-none"
+              className="w-full flex-grow bg-ledger-surface border border-ledger-line rounded-seal px-3 py-2.5 text-sm text-ledger-ink focus:border-ledger-seal outline-none"
             >
               <option value="beginner">Beginner</option>
               <option value="intermediate">Intermediate</option>
@@ -142,7 +143,7 @@ export default function CreateChallenge() {
               required
               value={form.rewardAmount}
               onChange={(e) => setForm({ ...form, rewardAmount: Number(e.target.value) })}
-              className="w-full bg-ledger-surface border border-ledger-line rounded-seal px-3 py-2.5 text-sm text-ledger-ink focus:border-ledger-seal outline-none"
+              className="w-full flex-grow bg-ledger-surface border border-ledger-line rounded-seal px-3 py-2.5 text-sm text-ledger-ink focus:border-ledger-seal outline-none"
             />
           </div>
           <div>
@@ -155,7 +156,7 @@ export default function CreateChallenge() {
               required
               value={form.maxWinners}
               onChange={(e) => setForm({ ...form, maxWinners: Number(e.target.value) })}
-              className="w-full bg-ledger-surface border border-ledger-line rounded-seal px-3 py-2.5 text-sm text-ledger-ink focus:border-ledger-seal outline-none"
+              className="w-full flex-grow bg-ledger-surface border border-ledger-line rounded-seal px-3 py-2.5 text-sm text-ledger-ink focus:border-ledger-seal outline-none"
             />
           </div>
         </div>
@@ -173,7 +174,7 @@ export default function CreateChallenge() {
             required
             value={form.deadline}
             onChange={(e) => setForm({ ...form, deadline: e.target.value })}
-            className="w-full bg-ledger-surface border border-ledger-line rounded-seal px-3 py-2.5 text-sm text-ledger-ink focus:border-ledger-seal outline-none"
+            className="w-full flex-grow bg-ledger-surface border border-ledger-line rounded-seal px-3 py-2.5 text-sm text-ledger-ink focus:border-ledger-seal outline-none"
           />
         </div>
 
@@ -186,7 +187,7 @@ export default function CreateChallenge() {
             rows={3}
             value={form.requirements}
             onChange={(e) => setForm({ ...form, requirements: e.target.value })}
-            className="w-full bg-ledger-surface border border-ledger-line rounded-seal px-3 py-2.5 text-sm text-ledger-ink focus:border-ledger-seal outline-none resize-none"
+            className="w-full flex-grow bg-ledger-surface border border-ledger-line rounded-seal px-3 py-2.5 text-sm text-ledger-ink focus:border-ledger-seal outline-none resize-none"
             placeholder="What must a submission include to qualify?"
           />
         </div>
