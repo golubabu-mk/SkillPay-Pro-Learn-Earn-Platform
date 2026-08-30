@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, LogOut, Moon, Sun, Smartphone, Copy, Eye, EyeOff, User } from "lucide-react";
+import { Menu, X, LogOut, Moon, Sun, Smartphone, Copy, Eye, EyeOff, User, Bell } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 
@@ -8,6 +8,7 @@ export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isDark, setIsDark] = useState(true);
   const [showBalance, setShowBalance] = useState(true);
+  const [showNotifications, setShowNotifications] = useState(false);
   const [avatar, setAvatar] = useState(localStorage.getItem("skillpay_avatar") || "1");
   const navigate = useNavigate();
 
@@ -90,7 +91,29 @@ export function Navbar() {
           </button>
 
           {user ? (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 relative">
+              <button 
+                onClick={() => setShowNotifications(!showNotifications)}
+                className="relative text-ledger-inkMuted hover:text-ledger-ink transition-colors p-2 rounded-full hover:bg-ledger-surface"
+              >
+                <Bell size={18} />
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-ledger-seal rounded-full"></span>
+              </button>
+              
+              {showNotifications && (
+                <div className="absolute top-12 right-12 w-64 bg-ledger-bg border border-ledger-line rounded-seal shadow-lg py-2 z-50">
+                  <div className="px-4 py-2 border-b border-ledger-line font-mono text-xs uppercase tracking-widest text-ledger-inkMuted">
+                    Notifications
+                  </div>
+                  <div className="px-4 py-3 text-sm text-ledger-ink border-b border-ledger-line hover:bg-ledger-surface cursor-pointer">
+                    Submission approved for "Build a Token"
+                  </div>
+                  <div className="px-4 py-3 text-sm text-ledger-ink hover:bg-ledger-surface cursor-pointer">
+                    New challenge available: "Implement Soroban Auth"
+                  </div>
+                </div>
+              )}
+
               <div className="bg-ledger-surface p-1 rounded-full border border-ledger-line text-ledger-inkMuted w-8 h-8 flex items-center justify-center overflow-hidden" title="User Profile">
                 {localStorage.getItem("skillpay_avatar") ? (
                   <img src={`https://api.dicebear.com/7.x/bottts/svg?seed=${avatar}`} alt="Avatar" className="w-full h-full" />
