@@ -72,6 +72,8 @@ contracts/  Soroban (Rust) — the reward and achievement contract + tests
 ### Analytics Dashboard
 - **PostHog Live Telemetry**:
   ![Analytics Dashboard](./images/analytics.png)
+- **On-Chain Analytics**:
+  ![On-Chain Analytics](./images/analytics_on_chain.png)
 
 ## 8. Users Onboarded
 
