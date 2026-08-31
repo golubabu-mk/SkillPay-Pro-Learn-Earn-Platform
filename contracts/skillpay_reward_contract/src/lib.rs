@@ -1,8 +1,6 @@
 #![no_std]
 
-use soroban_sdk::{
-    contract, contracterror, contractimpl, contracttype, Address, BytesN, Env,
-};
+use soroban_sdk::{contract, contracterror, contractimpl, contracttype, Address, BytesN, Env};
 
 // ---------------------------------------------------------------------------
 // Data types
@@ -42,7 +40,7 @@ pub struct Achievement {
 #[derive(Clone)]
 pub enum DataKey {
     Challenge(BytesN<32>),
-    Achievement(BytesN<32>, Address), // (challenge_id, learner)
+    Achievement(BytesN<32>, Address),     // (challenge_id, learner)
     ApprovedLearner(BytesN<32>, Address), // dedupe guard for approvals
 }
 
@@ -153,7 +151,10 @@ impl SkillPayRewardContract {
 
         env.storage().persistent().set(&key, &challenge);
 
-        env.events().publish((soroban_sdk::symbol_short!("Created"), challenge_id.clone()), (organization, reward_pool, max_winners));
+        env.events().publish(
+            (soroban_sdk::symbol_short!("Created"), challenge_id.clone()),
+            (organization, reward_pool, max_winners),
+        );
 
         Ok(())
     }
@@ -191,7 +192,10 @@ impl SkillPayRewardContract {
 
         env.storage().persistent().set(&key, &challenge);
 
-        env.events().publish((soroban_sdk::symbol_short!("Funded"), challenge_id.clone()), (amount, challenge.reward_pool));
+        env.events().publish(
+            (soroban_sdk::symbol_short!("Funded"), challenge_id.clone()),
+            (amount, challenge.reward_pool),
+        );
 
         Ok(())
     }
@@ -249,7 +253,14 @@ impl SkillPayRewardContract {
         env.storage().persistent().set(&key, &challenge);
         env.storage().persistent().set(&approved_key, &true);
 
-        env.events().publish((soroban_sdk::symbol_short!("Approved"), challenge_id.clone(), learner.clone()), (reward_amount, challenge.remaining_pool));
+        env.events().publish(
+            (
+                soroban_sdk::symbol_short!("Approved"),
+                challenge_id.clone(),
+                learner.clone(),
+            ),
+            (reward_amount, challenge.remaining_pool),
+        );
 
         Ok(())
     }
@@ -300,7 +311,14 @@ impl SkillPayRewardContract {
 
         env.storage().persistent().set(&akey, &achievement);
 
-        env.events().publish((soroban_sdk::symbol_short!("Issued"), challenge_id.clone(), learner.clone()), credential_hash);
+        env.events().publish(
+            (
+                soroban_sdk::symbol_short!("Issued"),
+                challenge_id.clone(),
+                learner.clone(),
+            ),
+            credential_hash,
+        );
 
         Ok(())
     }
@@ -328,7 +346,10 @@ impl SkillPayRewardContract {
         challenge.status = ChallengeStatus::Closed;
         env.storage().persistent().set(&key, &challenge);
 
-        env.events().publish((soroban_sdk::symbol_short!("Closed"), challenge_id.clone()), ());
+        env.events().publish(
+            (soroban_sdk::symbol_short!("Closed"), challenge_id.clone()),
+            (),
+        );
 
         Ok(())
     }

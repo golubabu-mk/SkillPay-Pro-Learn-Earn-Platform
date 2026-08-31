@@ -4,7 +4,13 @@ use super::*;
 use soroban_sdk::testutils::{Address as _, BytesN as _, Ledger, LedgerInfo};
 use soroban_sdk::Env;
 
-fn setup() -> (Env, SkillPayRewardContractClient<'static>, Address, Address, Address) {
+fn setup() -> (
+    Env,
+    SkillPayRewardContractClient<'static>,
+    Address,
+    Address,
+    Address,
+) {
     let env = Env::default();
     env.mock_all_auths();
     env.ledger().set(LedgerInfo {
