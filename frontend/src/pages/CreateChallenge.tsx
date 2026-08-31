@@ -19,7 +19,7 @@ export default function CreateChallenge() {
     category: "Web Development",
     difficulty: "intermediate" as ChallengeDifficulty,
     rewardAmount: 50,
-    rewardCurrency: "XLM",
+    rewardCurrency: "XLM" as "XLM" | "USDC",
     maxWinners: 5,
     deadline: "",
     requirements: "",
