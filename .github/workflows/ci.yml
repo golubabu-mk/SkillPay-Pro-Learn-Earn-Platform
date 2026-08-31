@@ -49,6 +49,41 @@ jobs:
         with:
           toolchain: stable
           target: wasm32-unknown-unknown
+          components: rustfmt, clippy
           override: true
+      
+      - name: Check Formatting
+        run: cd contracts/skillpay_reward_contract && cargo fmt -- --check
+        
+      - name: Run Clippy (Linter)
+        run: cd contracts/skillpay_reward_contract && cargo clippy --all-targets --all-features -- -D warnings
+        
+      - name: Run Tests
+        run: cd contracts/skillpay_reward_contract && cargo test
+
       - name: Build contract
         run: cd contracts/skillpay_reward_contract && cargo build --target wasm32-unknown-unknown --release
+
+      - name: Verify Testnet Deployment Workflow Script
+        run: |
+          if [ ! -f contracts/skillpay_reward_contract/deploy_testnet.sh ]; then
+            echo "Deployment script missing!"
+            exit 1
+          fi
+          chmod +x contracts/skillpay_reward_contract/deploy_testnet.sh
+          # Dry-run or syntax check (optional)
+
+  deploy-frontend:
+    needs: [frontend, contract]
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Deploy to Vercel (Production)
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          working-directory: frontend
+          vercel-args: '--prod'
